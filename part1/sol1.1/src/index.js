@@ -12,16 +12,20 @@ const Header = (x) => {
 const Content = (x) => {
   return(
     <div>
-      <p>
-        {x.part1} {x.exercises1}
-      </p>
-      <p>
-        {x.part2} {x.exercises2}
-      </p>
-      <p>
-        {x.part3} {x.exercises3}
-      </p>
+      <Part part={x.part1} exercises={x.exercises1}/>
+      <Part part={x.part2} exercises={x.exercises2}/>
+      <Part part={x.part3} exercises={x.exercises3}/>
     </div>
+  )
+}
+
+const Part = (x) => {
+  return(
+  <div>
+      <p>
+        {x.part} {x.exercises}
+      </p>
+  </div>
   )
 }
 
