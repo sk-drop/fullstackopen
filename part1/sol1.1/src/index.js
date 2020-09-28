@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
 const Header = (x) => {
@@ -38,8 +38,27 @@ const Total = (x) => {
   )
 }
 
+const Display = ({counter}) => <div>no. of secs u wasted ur time: {counter}</div>
+
+const Button = ({handleClick, text}) => (
+    <button onClick={handleClick}>
+      {text}
+    </button>
+)
+
 const App = () => {
-  const course = {
+  const [counter, setCounter] = useState(0)
+
+  setTimeout(
+    () => setCounter(counter+1),
+    1000
+  )
+
+  const increaseByOne = () => setCounter(counter+1)
+  const decreaseByOne = () => setCounter(counter-1)
+  const setToZero = () => setCounter(0)
+
+  const {name, parts} = {
     name: 'Half Stack application development',
     parts: [ 
       {
@@ -58,10 +77,16 @@ const App = () => {
   }
   return (
     <div>
-      <Header course={course.name}/>
-      <Content part1={course.parts[0][0]} part2={course.parts[1][0]} part3={course.parts[2][0]}
-      exercises1={course.parts[0][1]} exercises2={course.parts[1][1]} exercises3={course.parts[2][1]} />
-      <Total exercises1={course.parts[0][1]} exercises2={course.parts[1][1]} exercises3={course.parts[2][1]} />
+      <Header course={name}/>
+      <Content part1={parts[0].name} part2={parts[1].name} part3={parts[2].name}
+      exercises1={parts[0].exercises} exercises2={parts[1].exercises} exercises3={parts[2].exercises} />
+      <Total exercises1={parts[0].exercises} exercises2={parts[1].exercises} exercises3={parts[2].exercises} />
+      <div>
+      <Display counter={counter}/>
+      <Button handleClick ={increaseByOne} text='++'/>
+      <Button handleClick={decreaseByOne} text='--'/>
+      <Button handleClick={setToZero} text='Reset'/>
+      </div>
     </div>
   )
 }
