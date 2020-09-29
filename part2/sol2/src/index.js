@@ -25,36 +25,38 @@ const Part = (props) => {
 }
 
 const Content = ({course}) => {
-  const allcourses = course.length;
-  let allparts = 0;
+  const allparts = course.parts.length;
   const jsxparts = [];
-  var i;
-
-  for(i=0;i<allcourses; i++){
-    allparts += course[i].parts.length;
-  }  
+  var j;
   
-  for (i=0; i < allparts; i++) {
-    jsxparts.push(<Part part={course.parts[i]} key={i}/>)
-  }
+  for (j=0; j < allparts; j++) {
+      jsxparts.push(<Part part={course.parts[j]} key={j}/>)
+    }
 
   return <div>{jsxparts}</div>
 }
 
-const Course = ({course}) => {
-  return(
-    <div>
-    <Header course={course}/>
-    <Content course={course}/>
-    <Total parts={course.parts}/>
-    </div>
-  )
+const Courses = ({courses}) => {
+  const allcourses = courses.length;
+  const jsxcourses = []
+  var i;
 
+  for (i=0;i<allcourses;i++){
+    jsxcourses.push(<div> 
+                        <Header course={courses[i]} key={i/9}/>
+                        <Content course={courses[i]} key={(i/9)+1}/>
+                        <Total parts={courses[i].parts} key={(i/9)+2}/>
+                    </div>)
+  }
+  return(
+    <div>{jsxcourses}</div>
+  )
 }
+
 
 const App = () => {
 
-  const course = [
+  const courses = [
     {
       name: 'Half Stack application development',
       id: 1,
@@ -101,7 +103,7 @@ const App = () => {
 
   return (
     <div>
-    <Course course={course}/>
+    <Courses courses={courses}/>
     </div>
   )
 }
