@@ -1,20 +1,33 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
+const Statistic = (props) => {return(<tr><td>{props.text}:</td><td>{props.value}</td></tr>)}
+
 const Statistics = (props) => {
   return(
     <div>
       <h2>statistics</h2>
-      <p>good: {props.good}</p>
-      <p>neutral: {props.neutral}</p>
-      <p>bad: {props.bad}</p>
-      <p>all: {props.all}</p>
-      <p>average: {props.average}</p>
-      <p>positive: {props.positive}%</p>
+      <table>
+      <tbody>
+      <Statistic text="good" value={props.g}/>
+      <Statistic text="neutral" value={props.n}/>
+      <Statistic text="bad" value={props.b}/>
+      <Statistic text="all" value={props.all}/>
+      <Statistic text="average" value={props.ave}/>
+      <Statistic text="positive" value={props.pos+"%"}/>
+      </tbody>
+      </table>
     </div>
   )
 }
 
+const Button = (props) => {
+  return (
+    <button onClick = {props.handler}>
+      {props.text}
+    </button>
+  )
+}
 
 const App = () => {
   // save clicks of each button to own state
@@ -33,19 +46,22 @@ const App = () => {
   const feedback = ((good+bad+neutral) > 0)
 
   const show = () => {
-    if (feedback) {return(<Statistics good = {good} neutral = {neutral} bad ={bad} all = {good+bad+neutral}
-      average = {(good-bad)/(good+bad)} positive = {(good/(good+neutral+bad))*100}/>)}
-    else {return(<p>no feedback given</p>)}
+    if (feedback) {
+      return(
+      <Statistics g = {good} n = {neutral} b ={bad} all = {good+bad+neutral}
+      ave = {(good-bad)/(good+bad)} pos = {(good/(good+bad))*100}/>
+      )
+    } else {return(<p>no feedback given</p>)}
   }
 
   return (
     <div>
       <h1>give feedback</h1>
-      <button onClick = {() => setGood(good+1)}> good </button>
-      <button onClick = {() => setNeutral(neutral+1)}> neutral </button>
-      <button onClick = {() => setBad(bad+1)}> bad </button>
-      <button onClick = {() => reset()}> reset </button>
-      <p>{show()}</p>
+      <Button handler={()=> setGood(good+1)} text="good"/>
+      <Button handler={() => setNeutral(neutral+1)} text="neutral"/>
+      <Button handler={() => setBad(bad+1)} text="bad"/>
+      <Button handler={() => reset()} text="reset"/>
+      <div>{show()}</div>
     </div>
   )
 }
