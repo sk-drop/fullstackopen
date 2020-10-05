@@ -1,21 +1,28 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import AddContact from './components/AddContact'
 import Filter from './components/Filter'
 import Numbers from './components/Numbers'
+import axios from 'axios'
 
 
 // this app is a simple phonebook with adding and filtering functionality 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '0176-8880999'},
-    { name: 'Diego Hargreeves', number: '0172-10293829'},
-    { name: 'Luther Hargreeves', number: '0178-02981722'}
-  ])
-  // setting first states  
+  const [persons, setPersons] = useState([])
+  // setting initial states  
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
-  const [newGroup, setNewGroup] = useState(persons)
+  const [group, setNewGroup] = useState([])
+
+
+  useEffect(() => {
+    console.log('effect')
+    axios.get('http://localhost:3001/persons').then(response => {
+          console.log('fulfilled')
+          setPersons(response.data)
+          setNewGroup(response.data)
+        })
+  },[])
 
   // for updating array of saved names 
   let names = []
@@ -58,8 +65,7 @@ const App = () => {
     event.preventDefault()
 
     var a = setNewName('');
-    var b = setNewNumber('')
-    var c = setNewGroup(persons)
+    var b = setNewNumber('');
 
     const personObject = {
       name: newName, number: newNumber
@@ -69,7 +75,6 @@ const App = () => {
         return a && b;
     } else {
         setPersons(persons.concat(personObject))
-        setNewGroup(persons.concat(personObject))
         updateNames()
         return a && b;
     }
@@ -96,7 +101,7 @@ const App = () => {
       <Filter filter={filter} new={newFilter} handler={handleFilterChange}/>
       <AddContact add={addcontact} newName={newName} newNumber={newNumber} 
       nameHandler={handleNameChange} numberHandler={handleNumberChange}/>
-      <Numbers newGroup={newGroup}/>
+      <Numbers newGroup={group}/>
     </div>
   )
 }
