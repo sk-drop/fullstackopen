@@ -14,6 +14,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [newGroup, setNewGroup] = useState(persons)
 
   // for updating array of saved names 
   let names = []
@@ -29,34 +30,31 @@ const App = () => {
     if (names.find(element => element.toUpperCase() === newName.toUpperCase())) {
         return (
             [window.alert(`${newName} is already added!`), true]
-        )} else {return false}
-
+        )} else if (newName === '') {
+            return([true, true])
+        } else return false
   }
 
   // for filtering the persons array
-  const filtered =[]
-  const changeBook = (event) => {
+  const filter = (event) => {
     event.preventDefault()
     updateNames()
-    var i = 0
-    console.log(filtered);
-    for (i;i < names.length; i++){
-        if (names => names[i].contains(newFilter.toUpperCase())) {
-            console.log(filtered);
-            return filtered.concat(persons[i])
-        } else return;
+    let t = []
+    t = persons.filter(person => person.name.toUpperCase().includes(newFilter.toUpperCase()))
+    console.log(t)
+    if (t.length === 0){
+      window.alert(`${newFilter} can't be found!`)
+      setNewGroup(persons);
+      setNewFilter('');
+    } else {
+      setNewGroup(t);
+      setNewFilter('');
     }
-  }   
-
-  const filter = () => {
-    if (filtered === []) persons.map((person) => <Person person={person} key={person.number}/>)
-    else {filtered.map((person) => <Person person={person} key={person.number}/>)}
   }
 
   // for adding new contacts
   const addcontact = (event) => {
     event.preventDefault()
-    updateNames()
 
     var a = setNewName('');
     var b = setNewNumber('')
@@ -69,6 +67,7 @@ const App = () => {
         return a && b;
     } else {
         setPersons(persons.concat(personObject))
+        updateNames()
         return a && b;
     }
   }
@@ -91,7 +90,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <form onSubmit={changeBook}>
+      <form onSubmit={filter}>
         <p> filter by: <input value={newFilter} onChange={handleFilterChange}/></p>
         <button type="submit">filter</button>
       </form>
@@ -106,7 +105,7 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       <ul>
-        {persons.map((person) => <Person person={person} key={person.number}/>)}
+        {newGroup.map((person) => <Person person={person} key={person.number}/>)}
       </ul>
     </div>
   )
