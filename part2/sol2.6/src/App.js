@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import Person from './components/Person'
+import AddContact from './components/AddContact'
+import Filter from './components/Filter'
+import Numbers from './components/Numbers'
 
 
 // this app is a simple phonebook with adding and filtering functionality 
-
 const App = () => {
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas', number: '0176-8880999'},
@@ -58,6 +59,7 @@ const App = () => {
 
     var a = setNewName('');
     var b = setNewNumber('')
+    var c = setNewGroup(persons)
 
     const personObject = {
       name: newName, number: newNumber
@@ -67,6 +69,7 @@ const App = () => {
         return a && b;
     } else {
         setPersons(persons.concat(personObject))
+        setNewGroup(persons.concat(personObject))
         updateNames()
         return a && b;
     }
@@ -90,23 +93,10 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <form onSubmit={filter}>
-        <p> filter by: <input value={newFilter} onChange={handleFilterChange}/></p>
-        <button type="submit">filter</button>
-      </form>
-      <form onSubmit={addcontact}>
-        <div>
-          <p> name: <input value={newName} onChange={handleNameChange}/> </p>
-          <p> number: <input value={newNumber} onChange={handleNumberChange}/> </p>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      <ul>
-        {newGroup.map((person) => <Person person={person} key={person.number}/>)}
-      </ul>
+      <Filter filter={filter} new={newFilter} handler={handleFilterChange}/>
+      <AddContact add={addcontact} newName={newName} newNumber={newNumber} 
+      nameHandler={handleNameChange} numberHandler={handleNumberChange}/>
+      <Numbers newGroup={newGroup}/>
     </div>
   )
 }

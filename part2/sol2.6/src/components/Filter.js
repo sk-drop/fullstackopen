@@ -1,9 +1,12 @@
 import React from 'react'
-import Person from './Person';
 
-const Filter = ({filter}) => {
-    if (filtered === []) {persons.map((person) => <Person person={person} key={person.number}/>)}
-    else {filtered.map((person) => <Person person={person} key={person.number}/>)}
+function Filter(filter) {
+    return (
+        <form onSubmit={filter.filter}>
+            <p> filter by: <input value={filter.new} onChange={filter.handler} /></p>
+            <button type="submit">filter</button>
+        </form>
+    )
 }
 
 export default Filter
