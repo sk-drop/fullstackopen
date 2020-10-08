@@ -1,9 +1,9 @@
-import { element } from 'prop-types'
 import React, { useState, useEffect } from 'react'
 import AddContact from './components/AddContact'
 import Filter from './components/Filter'
 import Person from './components/Person'
 import contactService from './services/contacts'
+import Notification from './components/Error'
 
 
 // this app is a simple phonebook with adding and filtering functionality 
@@ -15,6 +15,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
   const [group, setNewGroup] = useState([])
+  const [message, setMessage] = useState(null)
 
 
   useEffect(() => {
@@ -36,12 +37,17 @@ const App = () => {
   const preventDouble = (personObj) => {
     updateNames();
     if (names.find(element => element.toUpperCase() === personObj.name.toUpperCase())) {  
-        if (window.confirm(`${personObj.name} is already added, replace?`))
+        if (window.confirm(`${personObj.name} is already added, replace?`)){
           return [(contactService.update(personObj, names.indexOf(`${personObj.name}`)+1)
                   .then(returnedC => {
                   setNewGroup(group.map(contact => 
                   contact.name !== personObj.name ? 
-                  contact : returnedC))})), true]
+                  contact : returnedC))})), true,
+                  setMessage(`${personObj.name} was changed`),
+                  setTimeout(()=>{
+                    setMessage(null)
+                  }, 5000)]
+                  } else return [true,true];
         } else if (newName === '') {
             return([true, true])
         } else return false
@@ -82,6 +88,10 @@ const App = () => {
           setPersons(persons.concat(returnedContact))
           setNewGroup(group.concat(returnedContact))
         })
+        setMessage(`${personObj.name} was added`)
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
         return a && b;
     }
   }
@@ -104,6 +114,10 @@ const App = () => {
   const handleDelete = (person) => {
     if (window.confirm(`Do you really want to delete ${person.name}?`)){
       contactService.del(person.id);
+      setMessage(`${person.name} was deleted`)
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
       setNewGroup(group.filter(per => per.id !== person.id))
     } else return
   }
@@ -111,6 +125,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message}/>
       <Filter filter={filter} new={newFilter} handler={handleFilterChange}/>
       <AddContact add={addcontact} newName={newName} newNumber={newNumber} 
       nameHandler={handleNameChange} numberHandler={handleNumberChange}/>
