@@ -15,7 +15,7 @@ const Info = ({country}) => {
                     </ul>
                 <br/>
                 <img src={country.flag} alt={`flag of ${country.name}`}
-                width="40%" height="40%" border="3"/>
+                width="100%" height="100%" border="3"/>
             </div>
         </div>
     )

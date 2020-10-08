@@ -4,6 +4,7 @@ import axios from 'axios'
 import Country from './components/Country'
 import Info from './components/Info'
 
+
 const App = () => {
     const [countries, setCountries] = useState([])
     const [group, setGroup] = useState([])
@@ -13,6 +14,7 @@ const App = () => {
         console.log('effect initiated');
         axios.get('https://restcountries.eu/rest/v2/all').then(response => {
             setCountries(response.data)
+            console.log(response.data);
         })
     },[])
 
